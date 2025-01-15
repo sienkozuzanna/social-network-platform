@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/posts_forms.css' %}">
+
+    <div class="form-container">
+        <h2>Edit Profile</h2>
+    
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="id_bio">Bio:</label>
+                {{ profile_form.bio }}
+                {% if profile_form.bio.errors %}
+                    <ul class="errorlist">
+                        {% for error in profile_form.bio.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="form-group">
+                <label for="id_profile_picture">Change Profile Picture:</label>
+                {{ profile_form.profile_picture }}
+                {% if profile_form.profile_picture.errors %}
+                    <ul class="errorlist">
+                        {% for error in profile_form.profile_picture.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn-primary">Save Profile Changes</button>
+        </form>
+
+        <hr>
+
+        <form method="POST">
+            {% csrf_token %}
+            <h3 style="text-align: center;">Change Password</h3>
+            <div class="form-group">
+                {{ password_form.as_p }}
+                {% if password_form.non_field_errors %}
+                    <ul class="errorlist">
+                        {% for error in password_form.non_field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn-primary">Change Password</button>
+        </form>
+
+        <a href="{% url 'my_profile' %}" class="btn-secondary">Cancel</a>
+    </div>
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{{ profile.user.username }}'s Profile
+{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<script src="{% static 'js/like.js' %}" defer></script>
+<div class="profile-container">
+    <div class="profile-header">
+        <div class="profile-picture">
+            <img src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'default_profile_picture.jpg' %}{% endif %}" alt="Profile Picture">
+        </div>
+        <div class="profile-info">
+            <div class="username-section">
+                <h1>{{ profile.user.username }}</h1>
+                {% if not is_my_profile %}
+                    <form method="POST" action="{% if is_following %}{% url 'unfollow_user' profile.user.username %}{% else %}{% url 'follow_user' profile.user.username %}{% endif %}" class="follow-form">
+                        {% csrf_token %}
+                        <button type="submit" class="{% if is_following %}unfollow-button{% else %}follow-button{% endif %}">
+                            {% if is_following %}Unfollow{% else %}Follow{% endif %}
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+            <p class="bio">{{ profile.bio }}</p>
+            <div class="followers-info">
+                <p><strong>Followers:</strong> {{ followers.count }}</p>
+                <p><strong>Following:</strong> {{ following.count }}</p>
+            </div>
+            {% if is_my_profile %}
+                    <div class="profile-actions">
+                        <a href="{% url 'add_post' %}" class="btn-primary">Add Post</a>
+                        <a href="{% url 'edit_profile' %}" class="btn-secondary">Edit Profile</a>
+                        <a href="{% url 'download_comments' %}" class="btn-secondary">My comments</a>
+                    </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="posts-container">
+        <div class="posts-grid">
+            {% for post in posts %}
+                <div class="post">
+                    <div class="post-header">
+                        <div class="post-header-left">
+                            <img src="{% if profile.profile_picture %}{{ profile.profile_picture.url }}{% else %}{% static 'default_profile_picture.jpg' %}{% endif %}" 
+                                 alt="Profile Picture" class="profile-picture">
+                            <span class="post-author">{{ profile.user.username }}</span>
+                        </div>
+                        {% if is_my_profile %}
+                            <div class="post-actions">
+                                <a href="{% url 'edit_post' post.id %}" class="btn-edit">Edit</a>
+                                <form method="POST" action="{% url 'delete_post' post.id %}" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn-delete">Delete</button>
+                                </form>
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% if post.image %}
+                        <div class="post-image-container">
+                            <img src="{{ post.image.url }}" alt="Post Image" class="post-image">
+                        </div>
+                    {% endif %}
+                    <div class="post-footer">
+                        <h3>{{ post.title }}</h3>
+                        <p class="post-description">{{ post.content }}</p>
+                        <span class="post-date">{{ post.created_at|date:"F j, Y" }}</span>
+                        <div class="like-section">
+                            <button class="like-button" data-post-id="{{ post.id }}" data-liked="{{ post.is_liked }}">
+                                {% if post.is_liked %}
+                                    ❤️ Unlike
+                                {% else %}
+                                    🤍 Like
+                                {% endif %}
+                            </button>
+                            <span class="likes-count">{{ post.likes.count }}</span>
+                        </div>
+                        <div class="comments-section">
+                            <h4>Comments</h4>
+                            <ul>
+                                {% for comment in post.comments.all %}
+                                    <li class="comment-item">
+                                        <div class="comment-content">
+                                            <strong>{{ comment.author.user.username }}</strong>: {{ comment.content }}
+                                        </div>
+                                        {% if comment.author == request.user.profile %}
+                                            <form method="POST" action="{% url 'delete_comment' comment.id %}" class="delete-comment-form">
+                                                {% csrf_token %}
+                                                <button type="submit" class="delete-comment-button">Delete</button>
+                                            </form>
+                                        {% endif %}
+                                    </li>
+                                {% empty %}
+                                    <p>No comments yet.</p>
+                                {% endfor %}
+                            </ul>
+                            <form method="post" action="{% url 'comment_post' post.id %}">
+                                {% csrf_token %}
+                                <textarea name="content" placeholder="Add a comment..." required></textarea>
+                                <button type="submit" class="comment-button">Comment</button>
+                            </form>
+                        </div>
+
+
+                    </div>
+                </div>
+            {% empty %}
+                <p>No posts yet.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<script src="{% static 'js/like.js' %}" defer></script>
+<div class="posts-container">
+    {% if not request.user.is_authenticated %}
+        <div class="alert alert-info">
+            <p>
+                You are not logged in. Please <a href="{% url 'login' %}">log in</a> or 
+                <a href="{% url 'register' %}">register</a> to get started.
+            </p>
+        </div>
+    {% endif %}
+
+    {% if request.user.is_authenticated and no_following_message %}
+        <div class="alert alert-warning">
+            <p>{{ no_following_message }}</p>
+        </div>
+    {% endif %}
+
+    {% if request.user.is_authenticated %}
+        <div class="posts-grid">
+            {% for post in page_obj %}
+                <div class="post">
+                   
+                    <div class="post-header">
+                        <img src="{% if post.author.profile.profile_picture %}{{ post.author.profile.profile_picture.url }}{% else %}{% static 'images/default-profile.png' %}{% endif %}" 
+                             alt="Profile Picture" class="profile-picture">
+                        <a href="{% url 'profile_view' post.author.username %}" class="post-author">{{ post.author.username }}</a>
+                    </div>
+
+                
+                    {% if post.image %}
+                        <div class="post-image-container">
+                            <img src="{{ post.image.url }}" alt="Post Image" class="post-image">
+                        </div>
+                    {% endif %}
+
+                
+                    <div class="post-footer">
+                        <p class="post-description"><strong>{{ post.author.username }}:</strong> {{ post.content }}</p>
+                        <span class="post-date">{{ post.created_at|date:"F j, Y" }}</span>
+
+                        <div class="like-section">
+                            <button class="like-button" data-post-id="{{ post.id }}" data-liked="{{ post.is_liked }}">
+                                {% if post.is_liked %}
+                                    ❤️ Unlike
+                                {% else %}
+                                    🤍 Like
+                                {% endif %}
+                            </button>
+                            <span class="likes-count">{{ post.likes.count }}</span>
+                        </div>
+
+                        <div class="comments-section">
+                            <h4>Comments</h4>
+                            <ul>
+                                {% for comment in post.comments.all %}
+                                    <li>
+                                        <strong>{{ comment.author.user.username }}</strong>: {{ comment.content }}
+                                    </li>
+                                {% empty %}
+                                    <p>No comments yet.</p>
+                                {% endfor %}
+                            </ul>
+
+                            <form method="post" action="{% url 'comment_post' post.id %}">
+                                {% csrf_token %}
+                                <textarea name="content" placeholder="Add a comment..." required></textarea>
+                                <button type="submit" class="comment-button">Comment</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% empty %}
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
+
+{% endblock %}

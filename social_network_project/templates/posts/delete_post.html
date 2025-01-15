@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/posts_forms.css' %}">
+<div class="container">
+    <h2>Delete Post</h2>
+    <p><strong>{{ post.title }}</strong></p>
+    <form id="deletePostForm" method="POST">
+        {% csrf_token %}
+        <p>Are you sure you want to delete this post?</p>
+        <button type="submit">Delete</button>
+    </form>
+    <a href="{% url 'my_profile' %}">Back to your profile</a>
+</div>
+{% endblock %}

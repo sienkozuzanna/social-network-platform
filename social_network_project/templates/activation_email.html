@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Activate Your Account</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Welcome to Our Platform, {{ user.username }}!</h2>
+        <p>Thank you for registering. To complete your registration, please activate your account by clicking the link below:</p>
+        <p><a href="{{ activation_link }}" class="btn">Activate Account</a></p>
+        <p>If you did not create this account, please ignore this email.</p>
+    </div>
+</body>
+</html>

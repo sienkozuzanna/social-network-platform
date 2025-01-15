@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edit Post{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/posts_forms.css' %}">
+<div class="form-container">
+    <h2>Edit Post</h2>
+    <form id="editPostForm" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="content">Content</label>
+            <textarea id="content" name="content" rows="5" required>{{ post.content }}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="image">Image</label>
+            {% if post.image %}
+                <p>Current Image:</p>
+                <div class="image-container">
+                    <img src="{{ post.image.url }}" alt="Post Image" class="current-image">
+                </div>
+            {% endif %}
+            <input type="file" id="image" name="image" accept="image/*">
+        </div>
+        <button type="submit" class="btn-primary">Save Changes</button>
+    </form>
+    <a href="{% url 'my_profile' %}" class="btn-secondary">Back to your profile</a>
+</div>
+{% endblock %}

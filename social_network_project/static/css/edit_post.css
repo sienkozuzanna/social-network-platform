@@ -1,0 +1,126 @@
+.post-detail-container {
+    width: 90%;
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    font-family: Arial, sans-serif;
+}
+
+.post-detail h3 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 15px;
+}
+
+.post-detail p {
+    font-size: 1rem;
+    color: #444;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.post-date {
+    font-size: 0.9rem;
+    color: #777;
+}
+
+.post-image {
+    width: 100%;
+    margin-bottom: 15px;
+    object-fit: cover;
+}
+
+.comments-section {
+    margin-top: 30px;
+    padding-top: 10px;
+}
+
+.comments-section h4 {
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.comment {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.comment strong {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.comment p {
+    font-size: 1rem;
+    color: #444;
+    margin: 5px 0;
+}
+
+.comment-date {
+    font-size: 0.8rem;
+    color: #999;
+}
+
+.comment-form textarea {
+    width: 100%;
+    padding: 8px;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    resize: vertical;
+}
+
+.comment-form button {
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.comment-form button:hover {
+    background-color: #1e2a38;
+}
+
+@media (max-width: 768px) {
+    .post-detail-container {
+        padding: 15px;
+    }
+
+    .post-detail h3 {
+        font-size: 1.6rem;
+    }
+
+    .comments-section h4 {
+        font-size: 1.3rem;
+    }
+
+    .comment-form textarea {
+        font-size: 0.8rem;
+    }
+
+    .comment-form button {
+        font-size: 0.8rem;
+    }
+}
+
+.btn-delete-comment {
+    background: none;
+    color: #e74c3c;
+    border: none;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+}
+
